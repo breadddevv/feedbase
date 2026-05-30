@@ -15,48 +15,6 @@ export const auth = betterAuth({
       clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
       enabled: true,
       prompt: "consent",
-      scope: ["guilds.members.read"],
-      async getUserInfo(token) {
-        const [userRes, memberRes] = await Promise.allSettled([
-          axios.get("https://discord.com/api/users/@me", {
-            headers: { Authorization: `Bearer ${token.accessToken}` },
-          }),
-          axios.get(
-            `https://discord.com/api/users/@me/guilds/${process.env.DISCORD_GUILD_ID}/member`,
-            {
-              headers: { Authorization: `Bearer ${token.accessToken}` },
-            }
-          ),
-        ]);
-
-        const user = userRes.status === "fulfilled" ? userRes.value.data : null;
-
-        if (!user?.id) return null;
-
-        let member = null;
-
-        if (memberRes.status === "fulfilled") {
-          member = memberRes.value.data;
-        }
-
-        const role = member?.roles?.length
-          ? resolveRole(member.roles)
-          : "guest";
-
-        return {
-          user: {
-            id: user.id,
-            name: user.global_name ?? user.username,
-            email: user.email,
-            emailVerified: user.verified ?? false,
-            image: user.avatar
-              ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
-              : undefined,
-            role,
-          },
-          data: user,
-        };
-      }
     },
   },
   hooks: {

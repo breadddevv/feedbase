@@ -168,10 +168,11 @@ export function MarkdownEditor({
         <button
           type="button"
           onClick={() => setPreview(!preview)}
+          disabled={!value.trim() || value.length == 0}
           className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-colors shrink-0
             ${preview
               ? "bg-primary/10 text-primary"
-              : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed"
             }`}
         >
           {preview ? <Pencil className="w-3 h-3" /> : <Eye className="w-3 h-3" />}

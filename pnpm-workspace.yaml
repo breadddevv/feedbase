@@ -1,7 +1,10 @@
 allowBuilds:
+  '@prisma/client': true
   '@prisma/engines': true
+  es5-ext: true
   prisma: true
   sharp: true
+  uglifyjs-webpack-plugin: true
   unrs-resolver: true
 minimumReleaseAgeExclude:
   - '@better-auth/core@1.6.12'

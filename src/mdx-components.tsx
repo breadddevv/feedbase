@@ -1,92 +1,111 @@
-import type { MDXComponents } from 'mdx/types'
-import Image from 'next/image'
+import type { MDXComponents } from "mdx/types";
+import Image from "next/image";
+import { CodeBlock } from "./components/markdown/codeBlock";
+import { SafeImage } from "./components/markdown/image";
 
 const components: MDXComponents = {
   h1: ({ children }) => (
-    <h1 className="text-3xl font-bold tracking-tight text-foreground mt-8 mb-4">{children}</h1>
+    <h1 className="text-2xl font-bold text-white mt-8 mb-4">{children}</h1>
   ),
   h2: ({ children }) => (
-    <h2 className="text-2xl font-semibold text-foreground mt-8 mb-3 border-b border-border pb-2">{children}</h2>
+    <h2 className="text-xl font-semibold text-white mt-7 mb-3 pb-2 border-b border-zinc-800">
+      {children}
+    </h2>
   ),
   h3: ({ children }) => (
-    <h3 className="text-lg font-semibold text-foreground mt-6 mb-2">{children}</h3>
-  ),
-  h4: ({ children }) => (
-    <h4 className="text-base font-semibold text-foreground mt-4 mb-1">{children}</h4>
+    <h3 className="text-base font-semibold text-zinc-100 mt-5 mb-2">
+      {children}
+    </h3>
   ),
   p: ({ children }) => (
-    <p className="text-sm text-muted-foreground leading-7 mb-4">{children}</p>
+    <p className="text-sm text-zinc-400 leading-7 mb-3">{children}</p>
   ),
   a: ({ children, href }) => (
     <a
       href={href}
-      className="text-primary underline underline-offset-4 decoration-primary/40 hover:decoration-primary transition-all"
-      target={"_blank"}
-      rel={"noopener noreferrer"}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-primary underline underline-offset-4 decoration-primary/30 hover:decoration-primary transition-all"
     >
       {children}
     </a>
   ),
   strong: ({ children }) => (
-    <strong className="font-semibold text-foreground">{children}</strong>
+    <strong className="font-semibold text-zinc-100">{children}</strong>
   ),
-  em: ({ children }) => (
-    <em className="italic text-muted-foreground">{children}</em>
+  em: ({ children }) => <em className="italic text-zinc-400">{children}</em>,
+  del: ({ children }) => (
+    <del className="line-through text-zinc-600 decoration-zinc-500">
+      {children}
+    </del>
   ),
   ul: ({ children }) => (
-    <ul className="my-4 ml-6 space-y-1.5 list-disc marker:text-muted-foreground/50">{children}</ul>
+    <ul className="my-4 ml-5 space-y-1.5 list-none">{children}</ul>
   ),
   ol: ({ children }) => (
-    <ol className="my-4 ml-6 space-y-1.5 list-decimal marker:text-muted-foreground/50">{children}</ol>
+    <ol className="my-4 ml-5 space-y-1.5 list-decimal marker:text-zinc-600">
+      {children}
+    </ol>
   ),
   li: ({ children }) => (
-    <li className="text-sm text-muted-foreground leading-7">{children}</li>
+    <li className="text-sm text-zinc-400 leading-7 flex items-start gap-2">
+      <span className="mt-2.5 w-1 h-1 rounded-full bg-zinc-600 shrink-0" />
+      <span>{children}</span>
+    </li>
   ),
   blockquote: ({ children }) => (
-    <blockquote className="my-4 border-l-2 border-primary/50 pl-4 text-sm italic text-muted-foreground">
-      {children}
+    <blockquote className="my-4 pl-4 border-l-2 border-primary/50">
+      <div className="text-sm italic text-zinc-500 leading-7">{children}</div>
     </blockquote>
   ),
-  code: ({ children }) => (
-    <code className="bg-muted text-foreground px-1.5 py-0.5 rounded text-xs font-mono border border-border">
-      {children}
-    </code>
-  ),
-  pre: ({ children }) => (
-    <pre className="my-4 rounded-xl border border-border bg-muted p-4 overflow-x-auto text-xs font-mono leading-relaxed">
-      {children}
-    </pre>
-  ),
-  hr: () => (
-    <hr className="my-6 border-border" />
-  ),
+
+  code: ({ node, className, children, ...props }) => {
+    const match = /language-(\w+)/.exec(className || "");
+    const lang = match?.[1] ?? "";
+    const code = String(children).replace(/\n$/, "");
+
+    if (!className) {
+      return (
+        <code className="bg-zinc-800 text-primary px-1.5 py-0.5 rounded-md text-xs font-mono border border-zinc-700">
+          {children}
+        </code>
+      );
+    }
+
+    return <CodeBlock code={code} lang={lang} />;
+  },
+  pre: ({ children }) => <>{children}</>,
+
   table: ({ children }) => (
-    <div className="my-4 overflow-x-auto rounded-lg border border-border">
-      <table className="w-full text-sm">{children}</table>
+    <div className="my-5 overflow-x-auto rounded-xl border border-zinc-800">
+      <table className="w-full text-sm border-collapse">{children}</table>
     </div>
   ),
   thead: ({ children }) => (
-    <thead className="bg-muted border-b border-border">{children}</thead>
+    <thead className="bg-zinc-800/60 border-b border-zinc-700">
+      {children}
+    </thead>
   ),
   tbody: ({ children }) => (
-    <tbody className="divide-y divide-border">{children}</tbody>
+    <tbody className="divide-y divide-zinc-800">{children}</tbody>
   ),
   tr: ({ children }) => (
-    <tr className="transition-colors hover:bg-muted/50">{children}</tr>
+    <tr className="transition-colors hover:bg-zinc-800/30">{children}</tr>
   ),
   th: ({ children }) => (
-    <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+    <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500">
       {children}
     </th>
   ),
   td: ({ children }) => (
-    <td className="px-4 py-2.5 text-sm text-muted-foreground">{children}</td>
+    <td className="px-4 py-3 text-sm text-zinc-400">{children}</td>
   ),
+  hr: () => <hr className="my-6 border-zinc-800" />,
   img: ({ src, alt }) => (
-    <Image src={src} alt={alt} className="my-4 rounded-xl border border-border w-full object-cover" />
+    <SafeImage src={src ?? ""} alt={alt ?? ""}/>
   ),
-}
+};
 
 export function useMDXComponents(): MDXComponents {
-  return components
+  return components;
 }

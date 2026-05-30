@@ -1,4 +1,3 @@
-// components/EditSuggestionModal.tsx
 "use client";
 import { Suggestion } from "@/types/types";
 import { AnimatePresence, motion } from "framer-motion";

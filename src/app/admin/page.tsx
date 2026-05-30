@@ -506,7 +506,6 @@ export default function ManagePage() {
   });
 
   if (session === undefined) return null;
-  if (!session?.data?.user || (session.data.user.role !== "admin" && session.data.user.role !== "owner")) return notFound();
 
   return (
     <div className="min-h-screen bg-black">

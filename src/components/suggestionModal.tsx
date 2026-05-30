@@ -7,6 +7,7 @@ import {
   Lightbulb,
   MessageSquare,
   Plus,
+  Send,
   Star,
   X,
 } from "lucide-react";
@@ -58,7 +59,7 @@ function CategoryDropdown({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={{ duration: 0.15 }}
-            className="absolute z-10 mt-1.5 w-full bg-card border border-border rounded-lg overflow-hidden shadow-lg shadow-black/20"
+            className="absolute z-10 mt-1.5 w-full bg-card border border-border rounded-xl overflow-hidden shadow-lg shadow-black/20"
           >
             {CATEGORY_OPTIONS.map((cat) => {
               const Icon = cat.icon;
@@ -76,7 +77,7 @@ function CategoryDropdown({
                     <Icon className="w-4 h-4 shrink-0" />
                     {cat.label}
                     {isActive && (
-                      <Check className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
+                      <Check className="ml-auto w-5 h-5 rounded-full text-primary" />
                     )}
                   </button>
                 </li>
@@ -205,8 +206,8 @@ function ModalContent({
           disabled={!title.trim() || !description.trim()}
           className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-primary/20"
         >
-          <Plus className="w-4 h-4" />
-          Submit
+          <Send className="w-4 h-4" />
+          Post
         </button>
       </div>
     </div>
