@@ -3,7 +3,7 @@ import { dbpool } from "./database";
 import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins";
 import axios from "axios";
-import { guest, teamboostify, owner, developer, admin as administration, contributor, perms } from "./permissions";
+import { guest, staff, owner, developer, admin as administration, contributor, perms } from "./permissions";
 import { resolveRole } from "./discord";
 import { createAuthMiddleware } from "better-auth/api";
 
@@ -77,7 +77,7 @@ export const auth = betterAuth({
         guest,
         admin: administration,
         owner,
-        staff: teamboostify,
+        staff,
         developer,
         contributor
       },

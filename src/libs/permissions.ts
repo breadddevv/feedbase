@@ -18,7 +18,7 @@ const contributor = ac.newRole({
   user: ["suggest"],
 });
 
-const teamboostify = ac.newRole({
+const staff = ac.newRole({
   management: ["manage"],
 });
 
@@ -49,4 +49,4 @@ function hasManagementAccess(session: AuthSession) {
   }
 }
 
-export { perms, guest, teamboostify, contributor, developer, admin, owner, hasManagementAccess };
+export { perms, guest, staff, contributor, developer, admin, owner, hasManagementAccess };
