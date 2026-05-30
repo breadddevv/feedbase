@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id String @id
+  name String
+  email String @unique
+  emailVerified Boolean
+  image String?
+  createdAt DateTime @db.Timestamptz(3)
+  updatedAt DateTime @db.Timestamptz(3)
+  role String?
+	banned Boolean?
+	banReason String?
+	banExpires DateTime? @db.Timestamptz(3)
+  sessions Session[]
+  accounts Account[]
+  suggestions Suggestion[]
+  comments    Comment[]
+  votes       Vote[]
+  @@map("user")
+}
+
+
+
+model Session {
+  id String @id
+
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  token String @unique
+  expiresAt DateTime @db.Timestamptz(3)
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @db.Timestamptz(3)
+  updatedAt DateTime @db.Timestamptz(3)
+
+  @@map("session")
+}
+
+model Verification {
+  id String @id
+  identifier String
+  value String
+  expiresAt DateTime @db.Timestamptz(3)
+  createdAt DateTime @db.Timestamptz(3)
+  updatedAt DateTime @db.Timestamptz(3)
+
+  @@map("verification")
+}
+
+model Account {
+  id String @id
+
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  accountId String
+  providerId String
+  accessToken String?
+  refreshToken String?
+  accessTokenExpiresAt DateTime? @db.Timestamptz(3)
+  refreshTokenExpiresAt DateTime? @db.Timestamptz(3)
+  scope String?
+  idToken String?
+  password String?
+  createdAt DateTime @db.Timestamptz(3)
+  updatedAt DateTime @db.Timestamptz(3)
+
+  @@map("account")
+}
+
+model Suggestion {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  status      SuggestionStatus @default(PENDING)
+  category    SuggestionCategory
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  messageid   String?
+  votes       Vote[]
+  comments    Comment[]
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+
+  @@map("suggestion")
+}
+
+model Comment {
+  id           String     @id @default(cuid())
+  content      String
+  authorId     String
+  author       User       @relation(fields: [authorId], references: [id])
+  suggestionId String
+  suggestion   Suggestion @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
+  parentId     String?
+  parent       Comment?   @relation("CommentReplies", fields: [parentId], references: [id])
+  replies      Comment[]  @relation("CommentReplies")
+  createdAt    DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime   @updatedAt @db.Timestamptz(3)
+
+  @@map("comment")
+}
+
+model Vote {
+  id           String     @id @default(cuid())
+  authorId     String
+  author       User       @relation(fields: [authorId], references: [id])
+  suggestionId String
+  suggestion   Suggestion @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now()) @db.Timestamptz(3)
+
+  @@unique([authorId, suggestionId]) // one vote per user per suggestion
+  @@map("vote")
+}
+
+enum SuggestionStatus {
+  PENDING
+  PLANNED
+  IN_PROGRESS
+  DONE
+  @@map("suggestion_status")
+}
+
+enum SuggestionCategory {
+  SUGGESTION
+  BUG
+  FEEDBACK
+  FEATURE
+
+  @@map("suggestion_category")
+}
