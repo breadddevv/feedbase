@@ -8,6 +8,7 @@ import { signIn } from "@/libs/sign";
 import { authClient } from "@/libs/auth-client";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { resolveOAuth } from "@/libs/resolveOAuth";
 
 const navLinks = [
   { name: "Roadmap", href: "/" },
@@ -199,7 +200,7 @@ export function Navbar() {
             ) : (
               <button
                 className="bg-white/5 hover:bg-white/15 px-4 py-1 rounded-lg transition-all cursor-pointer"
-                onClick={signIn}
+                onClick={() => signIn(resolveOAuth())}
               >
                 Login
               </button>
@@ -289,7 +290,7 @@ export function Navbar() {
                     </div>
                   ) : (
                     <button
-                      onClick={signIn}
+                      onClick={() => signIn(resolveOAuth())}
                       className="w-full bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
                     >
                       Login

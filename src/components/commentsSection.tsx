@@ -240,7 +240,7 @@ export function CommentsSection({
       ) : (
         <p 
           className="text-sm text-zinc-600 text-center py-2 hover:text-primary decoration-primary hover:underline cursor-pointer"
-          onClick={signIn}
+          onClick={() => signIn("discord")}
         >
           Log in to leave a comment.
         </p>

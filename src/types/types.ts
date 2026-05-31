@@ -45,6 +45,8 @@ export interface AuthSession {
   error: null | Error;
 }
 
+export type Provider = "github" | "google" | "roblox" | "discord";
+
 export type Role = "guest" | "admin" | "owner" | "staff" | "developer" | "contributor";
 
 export type ManagedUser = {
