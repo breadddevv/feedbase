@@ -8,7 +8,6 @@ import { NewPostModal } from "@/components/suggestionModal";
 import axios from "axios";
 import { AuthSession, Suggestion } from "@/types/types";
 import { SuggestionCard } from "@/components/suggestionCard";
-import { hasManagementAccess } from "../libs/permissions";
 import { LoginModal } from "@/components/loginModal";
 
 export default function Home() {

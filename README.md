@@ -22,6 +22,9 @@
   <img src="public/og.png" alt="Feedbase screenshot" width="100%" />
 </div>
 
+> [!WARNING]
+> Feedbase is a work in progress. By the time you're reading this, some features listed here may not yet be available — or new ones may have shipped that aren't documented yet. Have a suggestion or found something off? Open an [issue](https://github.com/breadddevv/feedbase/issues) or join us on [Discord](https://discord.gg/aYYFyfJSJC).
+
 ---
 
 ## What is Feedbase?
