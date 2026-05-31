@@ -4,6 +4,7 @@ import { ExternalLink } from "lucide-react";
 import { TbBrandGithubFilled, TbBrandDiscord, TbBrandX } from "react-icons/tb";
 import packageinfo from "@/../package.json";
 import Image from "next/image";
+import { FaDiscord } from "react-icons/fa";
 
 const GITHUB_URL = "https://github.com/breadddevv/feedbase";
 
@@ -137,7 +138,7 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-5">
             <Link href="/discord" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Discord">
-              <TbBrandDiscord className="h-5 w-5" />
+              <FaDiscord className="h-5 w-5" />
             </Link>
             <Link href="https://x.com/feedbase" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="X / Twitter">
               <TbBrandX className="h-4 w-4" />

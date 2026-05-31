@@ -4,6 +4,7 @@ import { SuggestionCategory } from "@/generated/prisma/client";
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import axios from "axios";
+import { formatWebhook } from "@/libs/text";
 
 const CATEGORY_MAP: Record<string, SuggestionCategory> = {
   suggestion: SuggestionCategory.SUGGESTION,
@@ -49,7 +50,7 @@ export async function POST(request: Request) {
       embeds: [{
         title,
         description,
-        color: 16730294,
+        color: 0xFF2B87,
         url: `${process.env.BETTER_AUTH_URL}/suggestion/${data.id}`,
         author: {
           name: `Posted by ${session.user.name}`,
@@ -58,7 +59,7 @@ export async function POST(request: Request) {
         fields:[
           {
             name: ":bookmark_tabs: Category",
-            value: categoryType,
+            value: formatWebhook(categoryType),
             inline: true
           },
           {
@@ -72,7 +73,9 @@ export async function POST(request: Request) {
             inline: true
           },
         ]
-      }]
+      }],
+      avatar_url: "https://cdn.breaddevv.cc/branding/feedbase/logo-pattern.png",
+      username: "Feedbase"
     });
 
     await prisma.suggestion.update({
