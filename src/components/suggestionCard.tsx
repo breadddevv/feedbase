@@ -6,6 +6,7 @@ import {
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { formatTimeAgo } from "@/libs/time";
 
 export function SuggestionCard({
   suggestion,
@@ -15,7 +16,7 @@ export function SuggestionCard({
   grid?: boolean;
 }) {
   return (
-    <Link href={`/feedback/${suggestion.id}`}>
+    <Link href={`/feedback/${suggestion.slug}`}>
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -57,7 +58,7 @@ export function SuggestionCard({
             )}
             <span className="text-xs text-zinc-300 dark:text-zinc-600">·</span>
             <span className="text-xs text-zinc-400">
-              {new Date(suggestion.createdAt).toLocaleDateString("en-GB")}
+              {formatTimeAgo(new Date(suggestion.createdAt))}
             </span>
           </div>
         </div>

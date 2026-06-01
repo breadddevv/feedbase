@@ -9,6 +9,7 @@ export interface Comment {
 
 export interface Suggestion {
   id: string;
+  slug: string;
   title: string;
   description: string;
   votes: { id: string; authorId: string }[];

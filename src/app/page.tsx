@@ -11,7 +11,6 @@ import { SuggestionCard } from "@/components/suggestionCard";
 import { LoginModal } from "@/components/loginModal";
 
 export default function Home() {
-  const [activeCategory, setActiveCategory] = useState("all");
   const [modalOpen, setModalOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [session, setSession] = useState<AuthSession | null>(null);
@@ -26,7 +25,7 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get("/api/suggestion");
+        const res = await axios.get("/api/feedback");
         setSuggestions(
           res.data.data.map((s: Suggestion) => ({
             ...s,
@@ -46,17 +45,13 @@ export default function Home() {
 
   const user = session?.data?.user;
 
-  const filtered = suggestions.filter(
-    (s) => activeCategory === "all" || s.category === activeCategory,
-  );
-
   async function handleNewPost(
     data: Omit<
       Suggestion,
       "id" | "votes" | "comments" | "status" | "author" | "createdAt"
     >,
   ) {
-    const payload = await axios.post("/api/suggestion", {
+    const payload = await axios.post("/api/feedback", {
       title: data.title,
       description: data.description,
       categoryType: data.category,
@@ -102,7 +97,7 @@ export default function Home() {
         <div className="flex gap-8 justify-center items-start w-full">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
             {STATUS_COLUMNS.map(({ key, label, dot }) => {
-              const columnCards = filtered.filter((s) => s.status === key);
+              const filteredSuggestions = suggestions.filter((s) => s.status === key);
               return (
                 <div
                   key={key}
@@ -115,8 +110,8 @@ export default function Home() {
                     </h2>
                   </div>
                   <div className="flex flex-col gap-3 flex-1 px-2">
-                    {columnCards.length > 0 ? (
-                      columnCards.map((s) => (
+                    {filteredSuggestions.length > 0 ? (
+                      filteredSuggestions.map((s) => (
                         <SuggestionCard
                           key={s.id}
                           suggestion={s}

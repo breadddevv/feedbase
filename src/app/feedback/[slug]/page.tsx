@@ -243,7 +243,7 @@ function DeleteModal({
 }
 
 export default function SuggestionPage() {
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ slug: string }>();
   const router = useRouter();
   const [session, setSession] = useState<AuthSession | null>(null);
   const [suggestion, setSuggestion] = useState<Suggestion | null>(null);
@@ -261,7 +261,7 @@ export default function SuggestionPage() {
   useEffect(() => {
     const fetchSuggestion = async () => {
       try {
-        const res = await axios.get(`/api/suggestion/${params.id}`);
+        const res = await axios.get(`/api/feedback/${params.slug}`);
         console.log(res.data);
         setSuggestion(res.data.data);
       } catch {
@@ -271,14 +271,14 @@ export default function SuggestionPage() {
       }
     };
     fetchSuggestion();
-  }, [params.id]);
+  }, [params.slug]);
 
   async function handleDelete() {
     if (!suggestion) return;
     setDeletePending(true);
     toast.loading("Deleting post...", { id: "delete-toast" });
     try {
-      await axios.delete(`/api/suggestion/${suggestion.id}`);
+      await axios.delete(`/api/feedback/${suggestion.slug}`);
       toast.success("Post deleted.", { id: "delete-toast" });
       router.push("/");
     } catch {
@@ -292,7 +292,7 @@ export default function SuggestionPage() {
     if (!suggestion) return;
     toast.loading("Updating status...", { id: "status-toast" });
     try {
-      await axios.patch(`/api/suggestion/${suggestion.id}`, { status });
+      await axios.patch(`/api/feedback/${suggestion.slug}`, { status });
       setSuggestion((prev) => (prev ? { ...prev, status } : prev));
       toast.success("Status updated.", { id: "status-toast" });
     } catch {

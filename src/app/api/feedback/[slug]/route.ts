@@ -6,11 +6,11 @@ import { NextResponse } from "next/server";
 import { ALLOWED_ROLES } from "@/libs/permissions";
 import { toSlug } from "@/libs/toSlug";
 
-export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const { id } = await params;
+    const { slug } = await params;
     const data = await prisma.suggestion.findUnique({
-      where: { id },
+      where: { slug },
       include: {
         author: true,
         comments: {
@@ -34,21 +34,21 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   }
 }
 
-export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export async function PATCH(request: Request, { params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const suggestion = await prisma.suggestion.findUnique({ where: { id } });
+  const suggestion = await prisma.suggestion.findUnique({ where: { slug } });
   if (!suggestion) return NextResponse.json({ error: "Not found" }, { status: 404 });
   if ((suggestion.authorId !== session.user.id) && !ALLOWED_ROLES[session.user.role]) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { title, description, category, status } = await request.json();
 
-  const slug = await toSlug(title);
+  const newSlug = await toSlug(title);
   const updated = await prisma.suggestion.update({
-    where: { id },
-    data: { title, description, category, status, slug },
+    where: { slug },
+    data: { title, description, category, status, slug: newSlug },
     include: {
       author: { select: { id: true, name: true, image: true } },
       votes: true,
@@ -60,17 +60,17 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   return NextResponse.json({ data: updated });
 }
 
-export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export async function DELETE(request: Request, { params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const suggestion = await prisma.suggestion.findUnique({ where: { id } });
+  const suggestion = await prisma.suggestion.findUnique({ where: { slug } });
   if (!suggestion) return NextResponse.json({ error: "Not found" }, { status: 404 });
   if ((suggestion.authorId !== session.user.id) && !ALLOWED_ROLES[session.user.role]) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   
   await discordWebhook(suggestion.id, true);
 
-  await prisma.suggestion.delete({ where: { id } });
+  await prisma.suggestion.delete({ where: { slug } });
   return NextResponse.json({ success: true });
 }

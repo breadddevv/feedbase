@@ -40,7 +40,7 @@ export async function POST(request: Request) {
 
     let mid = null;
 
-    if (process.env.DISCORD_WEBHOOK) {
+    if (process.env.DISCORD_WEBHOOK_URL) {
       const discordMsg = await axios.post(
         `${process.env.DISCORD_WEBHOOK_URL!}?wait=true`,
         {

@@ -14,9 +14,6 @@ import { NewPostModal } from "@/components/suggestionModal";
 import axios from "axios";
 import { AuthSession, Provider, Suggestion } from "@/types/types";
 import { SuggestionCard } from "@/components/suggestionCard";
-import CategorySheet from "@/components/mobileSheet";
-import Sidebar from "@/components/sidebar";
-import { hasManagementAccess } from "@/libs/permissions";
 import { resolveOAuthClient } from "@/libs/resolveOAuth";
 import toast from "react-hot-toast";
 
@@ -47,7 +44,7 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get("/api/suggestion");
+        const res = await axios.get("/api/feedback");
         setSuggestions(
           res.data.data.map((s: Suggestion) => ({
             ...s,
@@ -77,9 +74,6 @@ export default function Home() {
   }, []);
 
   const user = session?.data?.user;
-  const manageAccess = session?.data
-    ? (hasManagementAccess(session) ?? false)
-    : false;
 
   const filtered = suggestions.filter(
     (s) => activeCategory === "all" || s.category === activeCategory,
@@ -91,7 +85,7 @@ export default function Home() {
       "id" | "votes" | "comments" | "status" | "author" | "createdAt"
     >,
   ) {
-    const payload = await axios.post("/api/suggestion", {
+    const payload = await axios.post("/api/feedback", {
       title: data.title,
       description: data.description,
       categoryType: data.category,
