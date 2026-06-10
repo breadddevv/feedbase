@@ -21,9 +21,8 @@ RUN npx prisma generate
 # Bundle app source
 COPY . .
 
-# Build the app (Next.js cache persisted across builds)
-RUN --mount=type=cache,target=/usr/src/app/.next/cache \
-    npm run build
+# Build the app. Works without buildkit.
+RUN npm run build
 
 # Expose port 3000
 EXPOSE 3000
