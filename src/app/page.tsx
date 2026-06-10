@@ -9,6 +9,8 @@ import axios from "axios";
 import { AuthSession, Suggestion } from "@/types/types";
 import { SuggestionCard } from "@/components/suggestionCard";
 import { LoginModal } from "@/components/loginModal";
+import { toggleVote } from "@/libs/suggestions";
+import toast from "react-hot-toast";
 
 export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -56,6 +58,17 @@ export default function Home() {
       description: data.description,
       categoryType: data.category,
     });
+  }
+
+  async function handleVote(suggestionId: string) {
+    try {
+      toast.loading("Adding vote...", { id: "vote-toast" });
+      await toggleVote(suggestionId);
+      toast.success("Vote added!", { id: "vote-toast" });
+    } catch (err) {
+      console.log(err);
+      toast.error("Failed to add vote.", { id: "vote-toast" });
+    }
   }
 
   return (
@@ -115,6 +128,9 @@ export default function Home() {
                         <SuggestionCard
                           key={s.id}
                           suggestion={s}
+                          onVote={handleVote}
+                          votes={s.votes}
+                          hasSession={!!session}
                         />
                       ))
                     ) : (
